@@ -27,7 +27,46 @@ services:
         source: pgadmin
         target: /var/lib/pgadmin
     ports:
-      - "${PGADMIN_PORT:-5050}:80"
+      - "5050:80"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  eureka-service:
+    container_name: eureka-service
+    image: microservices-demo/eureka-service
+    volumes:
+      - type: volume
+        source: eureka-service
+        target: /var/lib/eureka-service
+    ports:
+      - "8761:8761"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  fraud-service:
+    container_name: fraud-service
+    image: microservices-demo/fraud-service
+    volumes:
+      - type: volume
+        source: fraud-service
+        target: /var/lib/fraud-service
+    ports:
+      - "8081:8081"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  customer-service:
+    container_name: customer-service
+    image: microservices-demo/customer-service
+    volumes:
+      - type: volume
+        source: customer-service
+        target: /var/lib/customer-service
+    ports:
+      - "8080:8080"
     networks:
       - postgres
     restart: unless-stopped
@@ -39,3 +78,6 @@ networks:
 volumes:
   postgres:
   pgadmin:
+  eureka-service:
+  customer-service:
+  fraud-service:
